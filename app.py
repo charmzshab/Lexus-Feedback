@@ -10,7 +10,9 @@ if ENV == 'dev':
 else:
     debug=False
     app.config['SQLALCHEMY_DATABASE_URI'] = ''
-    
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 @app.route('/')
 def index():
     return render_template('index.html')
