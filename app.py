@@ -15,7 +15,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 class Feedback(db.Model):
-    __tablename__='feedback'
+    __tablename__ = 'feedback'
     id = db.Column(db.Integer,primary_key=True)
     customer = db.Column(db.String(200),unique=True)
     dealer = db.Column(db.String(200))
@@ -27,7 +27,7 @@ class Feedback(db.Model):
         self.dealer = dealer
         self.rating = rating
         self.comments = comments
-        
+       
 
 @app.route('/')
 def index():
@@ -43,7 +43,12 @@ def submit():
         #print(customer,dealer,rating,comments)
         if customer == '' or dealer =='':
             return render_template('index.html',message='Please enter the required fields')
-        return render_template('success.html')
+        if db.session.query(Feedback).filter(Feedback.customer == customer).count() == 0:
+            data = Feedback(customer, dealer, rating, comments)
+            db.session.add(data)
+            db.session.commit() 
+            return render_template('success.html')
+        return render_template('index.html',message='You have already submitted feedback')
 
 
 
