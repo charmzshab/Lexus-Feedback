@@ -37,14 +37,14 @@ def index():
 def submit():
     if request.method == 'POST':
         customer = request.form['customer']
-        dealer = request.form['dealer']
+        dealer = request.form['dsealer']
         rating = request.form['rating']
         comments = request.form['comments']
         #print(customer,dealer,rating,comments)
         if customer == '' or dealer =='':
             return render_template('index.html',message='Please enter the required fields')
         if db.session.query(Feedback).filter(Feedback.customer == customer).count() == 0:
-            data = Feedback(customer, dealer, rating, comments)
+            sdata = Feedback(customer, dealer, rating, comments)
             db.session.add(data)
             db.session.commit() 
             return render_template('success.html')
